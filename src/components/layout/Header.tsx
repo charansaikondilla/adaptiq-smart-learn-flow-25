@@ -30,9 +30,34 @@ const Header = () => {
 
         <nav className="hidden md:flex items-center space-x-4">
           {user && (
-            <Link to="/dashboard" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-              Dashboard
-            </Link>
+            <>
+              <Link to="/dashboard" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                Dashboard
+              </Link>
+              {user.role === 'teacher' && (
+                <>
+                  <Link to="/classes" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Classes
+                  </Link>
+                  <Link to="/analytics" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Analytics
+                  </Link>
+                </>
+              )}
+              {user.role === 'student' && (
+                <>
+                  <Link to="/courses" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    My Courses
+                  </Link>
+                  <Link to="/notes" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Notes
+                  </Link>
+                  <Link to="/progress" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Progress
+                  </Link>
+                </>
+              )}
+            </>
           )}
         </nav>
 
