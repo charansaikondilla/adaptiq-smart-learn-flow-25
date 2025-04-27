@@ -1,8 +1,14 @@
 
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const NotFound = () => {
+  const { user } = useAuth();
+
+  // Determine where to send the user based on their login status
+  const redirectPath = user ? '/dashboard' : '/';
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] px-4 text-center">
       <h1 className="text-9xl font-bold text-adaptiq-300">404</h1>
@@ -12,7 +18,9 @@ const NotFound = () => {
         The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
       </p>
       <Button asChild size="lg">
-        <Link to="/">Back to Home</Link>
+        <Link to={redirectPath}>
+          {user ? 'Back to Dashboard' : 'Back to Home'}
+        </Link>
       </Button>
     </div>
   );

@@ -5,6 +5,10 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Class } from '@/types';
+import { Calendar, Book, AlertCircle } from 'lucide-react';
+import ClassDetailDialog from '@/components/class/ClassDetailDialog';
+import { useToast } from '@/hooks/use-toast';
+import CreateClassDialog from '@/components/class/CreateClassDialog';
 
 // Mock classes for demo
 const mockClasses: Class[] = [
@@ -37,6 +41,7 @@ const mockClasses: Class[] = [
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [upcomingClasses, setUpcomingClasses] = useState<Class[]>([]);
   const [recentClasses, setRecentClasses] = useState<Class[]>([]);
 
@@ -45,6 +50,20 @@ const Dashboard = () => {
     setUpcomingClasses(mockClasses.slice(0, 2));
     setRecentClasses([mockClasses[2]]);
   }, []);
+
+  const handlePreQuiz = (classId: string) => {
+    toast({
+      title: "Quiz Loading",
+      description: "Preparing your pre-class quiz...",
+    });
+  };
+
+  const handlePostQuiz = (classId: string) => {
+    toast({
+      title: "Quiz Loading",
+      description: "Preparing your post-class quiz...",
+    });
+  };
 
   const TeacherDashboard = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -65,9 +84,12 @@ const Dashboard = () => {
                         {new Date(cls.scheduledFor!).toLocaleString()}
                       </p>
                     </div>
-                    <Button asChild variant="outline" size="sm">
-                      <Link to={`/classes/${cls.id}`}>View Details</Link>
-                    </Button>
+                    <ClassDetailDialog 
+                      classData={cls} 
+                      triggerText="View Details" 
+                      buttonVariant="outline"
+                      buttonSize="sm"
+                    />
                   </div>
                 </div>
               ))}
@@ -89,7 +111,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-4 border rounded-lg text-center">
                 <p className="text-lg font-medium text-adaptiq-600">85%</p>
-                <p className="text-sm text-gray-500">Average Engagement</p>
+                <p className="text-sm text-gray-500">Class Average</p>
               </div>
               <div className="p-4 border rounded-lg text-center">
                 <p className="text-lg font-medium text-adaptiq-600">24</p>
@@ -97,7 +119,7 @@ const Dashboard = () => {
               </div>
               <div className="p-4 border rounded-lg text-center">
                 <p className="text-lg font-medium text-adaptiq-600">12</p>
-                <p className="text-sm text-gray-500">Pending Questions</p>
+                <p className="text-sm text-gray-500">Sessions Taken</p>
               </div>
             </div>
           </CardContent>
@@ -116,10 +138,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button className="w-full" asChild>
-              <Link to="/classes/create">Create New Class</Link>
-            </Button>
-            <Button className="w-full" variant="outline" asChild>
-              <Link to="/quiz/create">Create New Quiz</Link>
+              <CreateClassDialog />
             </Button>
             <Button className="w-full" variant="outline" asChild>
               <Link to="/resources">Manage Resources</Link>
@@ -172,12 +191,14 @@ const Dashboard = () => {
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button asChild variant="outline" size="sm">
-                        <Link to={`/pre-quiz/${cls.id}`}>Take Pre-Quiz</Link>
+                      <Button variant="outline" size="sm" onClick={() => handlePreQuiz(cls.id)}>
+                        Take Pre-Quiz
                       </Button>
-                      <Button asChild size="sm">
-                        <Link to={`/classes/${cls.id}`}>View Class</Link>
-                      </Button>
+                      <ClassDetailDialog 
+                        classData={cls} 
+                        triggerText="View Class" 
+                        buttonSize="sm"
+                      />
                     </div>
                   </div>
                 </div>
@@ -209,10 +230,10 @@ const Dashboard = () => {
                     </div>
                     <div className="flex gap-2">
                       <Button asChild variant="outline" size="sm">
-                        <Link to={`/notes/${cls.id}`}>View Notes</Link>
+                        <Link to={`/notes`}>View Notes</Link>
                       </Button>
-                      <Button asChild size="sm">
-                        <Link to={`/post-quiz/${cls.id}`}>Take Quiz</Link>
+                      <Button size="sm" onClick={() => handlePostQuiz(cls.id)}>
+                        Take Quiz
                       </Button>
                     </div>
                   </div>
@@ -275,19 +296,19 @@ const Dashboard = () => {
           <CardContent>
             <div className="space-y-3">
               <div className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                <Link to="#" className="text-sm font-medium text-adaptiq-600 hover:underline">
+                <Link to="/resources" className="text-sm font-medium text-adaptiq-600 hover:underline">
                   Understanding Big O Notation
                 </Link>
                 <p className="text-xs text-gray-500">Video • 15 min</p>
               </div>
               <div className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                <Link to="#" className="text-sm font-medium text-adaptiq-600 hover:underline">
+                <Link to="/resources" className="text-sm font-medium text-adaptiq-600 hover:underline">
                   Introduction to Binary Search Trees
                 </Link>
                 <p className="text-xs text-gray-500">Article • 10 min read</p>
               </div>
               <div className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                <Link to="#" className="text-sm font-medium text-adaptiq-600 hover:underline">
+                <Link to="/resources" className="text-sm font-medium text-adaptiq-600 hover:underline">
                   Practice Problems: Sorting Algorithms
                 </Link>
                 <p className="text-xs text-gray-500">Interactive • 5 exercises</p>
