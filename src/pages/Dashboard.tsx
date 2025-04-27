@@ -17,6 +17,7 @@ const mockClasses: Class[] = [
     teacherId: '1',
     createdAt: '2023-01-15T10:00:00Z',
     scheduledFor: '2025-05-01T07:30:00Z',
+    meetingUrl: 'https://meet.google.com/abc-defg-hij',
     resources: [
       { id: '101', title: 'CS Fundamentals PDF', type: 'article', url: '#', description: 'Comprehensive overview of CS concepts', conceptIds: ['c1'] },
       { id: '102', title: 'Programming Basics Video', type: 'video', url: '#', description: 'Visual introduction to programming', conceptIds: ['c2'] }
@@ -29,6 +30,7 @@ const mockClasses: Class[] = [
     teacherId: '1',
     createdAt: '2023-02-10T09:30:00Z',
     scheduledFor: '2025-05-02T03:30:00Z',
+    meetingUrl: 'https://meet.google.com/xyz-abcd-efg',
     resources: [
       { id: '103', title: 'Applied Mathematics Guide', type: 'article', url: '#', description: 'In-depth guide to mathematical applications', conceptIds: ['c3'] }
     ]
@@ -40,6 +42,7 @@ const mockClasses: Class[] = [
     teacherId: '2',
     createdAt: '2023-03-10T13:00:00Z',
     scheduledFor: '2025-05-05T02:30:00Z',
+    meetingUrl: 'https://meet.google.com/pqr-stuv-wxy',
     resources: [
       { id: '106', title: 'HTML/CSS Cheatsheet', type: 'article', url: '#', description: 'Quick reference for web developers', conceptIds: ['c6'] }
     ]
@@ -135,14 +138,27 @@ const Dashboard = () => {
                       <Button variant="outline" size="sm">
                         Pre-Quiz
                       </Button>
-                      <Button variant="primary" size="sm">
+                      <Button variant="default" size="sm">
                         View Class
                       </Button>
                     </div>
                   </div>
-                  <div className="flex items-center text-gray-500 text-sm">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    <span>{formatDate(classItem.scheduledFor)}</span>
+                  <div className="flex items-center justify-between text-gray-500 text-sm">
+                    <div className="flex items-center">
+                      <Calendar className="h-4 w-4 mr-1" />
+                      <span>{formatDate(classItem.scheduledFor)}</span>
+                    </div>
+                    {classItem.meetingUrl && (
+                      <a 
+                        href={classItem.meetingUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center text-blue-600 hover:text-blue-800"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-1" />
+                        <span>Join Meeting</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
@@ -176,7 +192,7 @@ const Dashboard = () => {
                       <Button variant="outline" size="sm">
                         View Notes
                       </Button>
-                      <Button variant="primary" size="sm">
+                      <Button variant="default" size="sm">
                         Post Quiz
                       </Button>
                     </div>
