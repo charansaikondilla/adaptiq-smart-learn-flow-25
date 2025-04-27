@@ -9,6 +9,7 @@ import ClassCalendarView from "@/components/teacher/ClassCalendarView";
 import ResponsiveDialog from "@/components/teacher/ResponsiveDialog";
 import CreateClassForm from "@/components/teacher/CreateClassForm";
 import AllStudentsView from "@/components/teacher/AllStudentsView";
+import ClassAnalytics from "@/components/teacher/ClassAnalytics";
 
 // Mock data
 const mockClasses: Class[] = [
@@ -132,6 +133,7 @@ const TeacherDashboard: React.FC = () => {
   const [isViewAllStudentsOpen, setIsViewAllStudentsOpen] = useState(false);
   const [isManageResourcesOpen, setIsManageResourcesOpen] = useState(false);
   const [classes, setClasses] = useState<Class[]>(mockClasses);
+  const [selectedClass, setSelectedClass] = useState<Class | null>(null);
 
   const upcomingClasses = classes.filter(
     (classItem) => 
