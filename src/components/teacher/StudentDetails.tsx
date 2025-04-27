@@ -9,7 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { formatDate } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface StudentDetailsProps {
   student: Student;
@@ -33,28 +36,18 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium">Overall Score</p>
-                  <div className="mt-1 h-4 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-blue-500"
-                      style={{ width: `${student.overallScore}%` }}
-                    ></div>
+                  <div className="flex justify-between mb-1">
+                    <p className="text-sm font-medium">Overall Score</p>
+                    <p className="text-sm font-medium">{student.overallScore}%</p>
                   </div>
-                  <p className="mt-1 text-sm text-right">
-                    {student.overallScore}%
-                  </p>
+                  <Progress value={student.overallScore} className="h-2" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Participation</p>
-                  <div className="mt-1 h-4 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-green-500"
-                      style={{ width: `${student.participation}%` }}
-                    ></div>
+                  <div className="flex justify-between mb-1">
+                    <p className="text-sm font-medium">Participation</p>
+                    <p className="text-sm font-medium">{student.participation}%</p>
                   </div>
-                  <p className="mt-1 text-sm text-right">
-                    {student.participation}%
-                  </p>
+                  <Progress value={student.participation} className="h-2" />
                 </div>
               </CardContent>
             </Card>
@@ -66,22 +59,22 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium">Strengths</p>
-                  <div className="mt-1 flex flex-wrap gap-2">
+                  <p className="text-sm font-medium mb-2">Strengths</p>
+                  <div className="flex flex-wrap gap-2">
                     {student.strengthAreas.map((area) => (
-                      <span key={area} className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                      <Badge key={area} variant="outline" className="bg-green-50 text-green-700 border-green-200">
                         {area}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Needs Improvement</p>
-                  <div className="mt-1 flex flex-wrap gap-2">
+                  <p className="text-sm font-medium mb-2">Needs Improvement</p>
+                  <div className="flex flex-wrap gap-2">
                     {student.improvementAreas.map((area) => (
-                      <span key={area} className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">
+                      <Badge key={area} variant="outline" className="bg-red-50 text-red-700 border-red-200">
                         {area}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -109,33 +102,21 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
                           <h4 className="font-medium">Class #{index + 1}</h4>
                           <p className="text-xs text-muted-foreground">{formatDate(mockDate.toISOString())}</p>
                         </div>
-                        <div className="text-right">
-                          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                            {session.participation}% participation
-                          </span>
-                        </div>
+                        <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                          {session.participation}% participation
+                        </Badge>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 mt-3">
                         <div>
                           <p className="text-xs font-medium mb-1">Pre-Quiz Score</p>
-                          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-amber-400"
-                              style={{ width: `${session.preQuizScore}%` }}
-                            ></div>
-                          </div>
+                          <Progress value={session.preQuizScore} className="h-2" />
                           <p className="text-xs mt-1 text-right">{session.preQuizScore}%</p>
                         </div>
                         
                         <div>
                           <p className="text-xs font-medium mb-1">Post-Quiz Score</p>
-                          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-green-500"
-                              style={{ width: `${session.postQuizScore}%` }}
-                            ></div>
-                          </div>
+                          <Progress value={session.postQuizScore} className="h-2" />
                           <p className="text-xs mt-1 text-right">{session.postQuizScore}%</p>
                         </div>
                       </div>
