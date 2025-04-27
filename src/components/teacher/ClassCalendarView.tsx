@@ -4,6 +4,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { formatDate } from "@/lib/utils";
 import { Class } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
+import { ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ClassCalendarViewProps {
   classes: Class[];
@@ -47,7 +49,38 @@ const ClassCalendarView: React.FC<ClassCalendarViewProps> = ({ classes }) => {
                 <CardContent className="p-4">
                   <h4 className="font-semibold">{classItem.title}</h4>
                   <p className="text-muted-foreground text-sm mb-2">{formatDate(classItem.scheduledFor)}</p>
-                  <p className="text-sm">{classItem.description}</p>
+                  <p className="text-sm mb-3">{classItem.description}</p>
+                  
+                  {classItem.resources && classItem.resources.length > 0 && (
+                    <div className="mt-2">
+                      <h5 className="text-sm font-medium mb-1">Resources:</h5>
+                      <ul className="space-y-1">
+                        {classItem.resources.map((resource) => (
+                          <li key={resource.id} className="text-sm flex items-center justify-between">
+                            <span>{resource.title}</span>
+                            {resource.url && (
+                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0" asChild>
+                                <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {classItem.meetingUrl && (
+                    <div className="mt-3 pt-2 border-t">
+                      <Button size="sm" variant="outline" className="w-full" asChild>
+                        <a href={classItem.meetingUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1">
+                          <ExternalLink className="h-4 w-4" />
+                          Join Meeting
+                        </a>
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))

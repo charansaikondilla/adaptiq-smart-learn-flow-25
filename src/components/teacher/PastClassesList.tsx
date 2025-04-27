@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye } from "lucide-react";
+import { ChartBar } from "lucide-react";
 import ResponsiveDialog from "./ResponsiveDialog";
 import ClassAnalytics from "./ClassAnalytics";
 
@@ -55,12 +55,12 @@ const PastClassesList: React.FC<PastClassesListProps> = ({ classes }) => {
                   <TableCell>78%</TableCell>
                   <TableCell className="text-right">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       className="flex items-center gap-1"
                       onClick={() => handleViewAnalytics(classItem)}
                     >
-                      <Eye className="h-4 w-4" />
+                      <ChartBar className="h-4 w-4" />
                       View Analytics
                     </Button>
                   </TableCell>

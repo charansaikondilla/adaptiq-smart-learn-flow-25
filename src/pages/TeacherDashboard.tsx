@@ -130,6 +130,7 @@ const TeacherDashboard: React.FC = () => {
   const [isViewAllUpcomingClassesOpen, setIsViewAllUpcomingClassesOpen] = useState(false);
   const [isViewAllPastClassesOpen, setIsViewAllPastClassesOpen] = useState(false);
   const [isViewAllStudentsOpen, setIsViewAllStudentsOpen] = useState(false);
+  const [isManageResourcesOpen, setIsManageResourcesOpen] = useState(false);
   const [classes, setClasses] = useState<Class[]>(mockClasses);
 
   const upcomingClasses = classes.filter(
@@ -175,6 +176,12 @@ const TeacherDashboard: React.FC = () => {
             >
               View All Upcoming Classes
             </Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsManageResourcesOpen(true)}
+            >
+              Manage Resources
+            </Button>
             <Button onClick={() => setIsCreateClassOpen(true)}>
               Create New Class
             </Button>
@@ -194,13 +201,30 @@ const TeacherDashboard: React.FC = () => {
                   {new Date(classItem.scheduledFor).toLocaleTimeString()}
                 </p>
                 <p className="text-sm mb-4 line-clamp-2">{classItem.description}</p>
+                
+                {/* Display resources if available */}
+                {classItem.resources && classItem.resources.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium mb-1">Resources:</h4>
+                    <ul className="text-sm space-y-1">
+                      {classItem.resources.map(resource => (
+                        <li key={resource.id} className="flex items-center">
+                          <span className="truncate">{resource.title}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
                 <div className="flex justify-between items-center pt-2 border-t">
                   <Button variant="ghost" size="sm">
                     View Details
                   </Button>
                   {classItem.meetingUrl && (
-                    <Button size="sm" variant="outline">
-                      Join Meeting
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={classItem.meetingUrl} target="_blank" rel="noopener noreferrer">
+                        Join Meeting
+                      </a>
                     </Button>
                   )}
                 </div>
@@ -252,7 +276,16 @@ const TeacherDashboard: React.FC = () => {
                     <td className="px-4 py-3 text-sm text-gray-500">25</td>
                     <td className="px-4 py-3 text-sm text-gray-500">78%</td>
                     <td className="px-4 py-3 text-right">
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          const classToView = classes.find(c => c.id === classItem.id);
+                          if (classToView) {
+                            setSelectedClass(classToView);
+                          }
+                        }}
+                      >
                         View Analytics
                       </Button>
                     </td>
@@ -330,6 +363,55 @@ const TeacherDashboard: React.FC = () => {
         maxWidth="max-w-5xl"
       >
         <AllStudentsView students={mockStudents} classes={classes} />
+      </ResponsiveDialog>
+
+      {/* Manage Resources Dialog */}
+      <ResponsiveDialog
+        isOpen={isManageResourcesOpen}
+        onClose={() => setIsManageResourcesOpen(false)}
+        title="Manage Resources"
+        maxWidth="max-w-4xl"
+      >
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Class Resources</h3>
+          
+          {classes.map((classItem) => (
+            <div key={classItem.id} className="border rounded-lg p-4">
+              <h4 className="font-medium text-lg mb-2">{classItem.title}</h4>
+              <p className="text-sm text-gray-500 mb-4">
+                {new Date(classItem.scheduledFor).toLocaleDateString()}
+              </p>
+              
+              {classItem.resources && classItem.resources.length > 0 ? (
+                <div>
+                  <h5 className="font-medium text-sm mb-2">Resources:</h5>
+                  <ul className="space-y-2">
+                    {classItem.resources.map((resource) => (
+                      <li key={resource.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                        <div>
+                          <p className="font-medium">{resource.title}</p>
+                          <p className="text-xs text-muted-foreground">{resource.type}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm">Edit</Button>
+                          <Button variant="outline" size="sm" className="text-red-500">Remove</Button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p className="text-gray-500 text-sm">No resources have been added for this class.</p>
+              )}
+              
+              <div className="mt-4 pt-3 border-t flex justify-end">
+                <Button variant="outline" size="sm">
+                  Add Resources
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
       </ResponsiveDialog>
     </div>
   );
