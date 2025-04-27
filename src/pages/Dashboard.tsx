@@ -4,10 +4,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar, ChevronRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Class, Resource } from '@/types';
+
+// Import custom modals
+import PreQuizModal from '@/components/student/PreQuizModal';
+import PostQuizModal from '@/components/student/PostQuizModal';
+import ClassDetailsModal from '@/components/student/ClassDetailsModal';
+import NotesModal from '@/components/student/NotesModal';
+import AllClassesModal from '@/components/student/AllClassesModal';
+import AllResourcesModal from '@/components/student/AllResourcesModal';
+import DetailedAnalyticsModal from '@/components/student/DetailedAnalyticsModal';
 
 const mockClasses: Class[] = [
   {
@@ -107,7 +115,36 @@ const formatDate = (dateString: string) => {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  
+  // Modal states
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showPreQuiz, setShowPreQuiz] = useState(false);
+  const [showPostQuiz, setShowPostQuiz] = useState(false);
+  const [showClassDetails, setShowClassDetails] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
+  const [showAllClasses, setShowAllClasses] = useState(false);
+  const [showAllResources, setShowAllResources] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<Class | null>(null);
+
+  const handlePreQuiz = (classItem: Class) => {
+    setSelectedClass(classItem);
+    setShowPreQuiz(true);
+  };
+
+  const handlePostQuiz = (classItem: Class) => {
+    setSelectedClass(classItem);
+    setShowPostQuiz(true);
+  };
+
+  const handleViewClass = (classItem: Class) => {
+    setSelectedClass(classItem);
+    setShowClassDetails(true);
+  };
+
+  const handleViewNotes = (classItem: Class) => {
+    setSelectedClass(classItem);
+    setShowNotes(true);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -125,8 +162,8 @@ const Dashboard = () => {
                 <CardTitle>Upcoming Classes</CardTitle>
                 <CardDescription>Your scheduled classes for this week</CardDescription>
               </div>
-              <Button variant="link" className="font-medium" asChild>
-                <Link to="#">View All</Link>
+              <Button variant="link" className="font-medium" onClick={() => setShowAllClasses(true)}>
+                View All
               </Button>
             </CardHeader>
             <CardContent>
@@ -135,10 +172,18 @@ const Dashboard = () => {
                   <div className="flex flex-col md:flex-row md:items-center justify-between mb-1">
                     <h3 className="font-semibold text-lg">{classItem.title}</h3>
                     <div className="flex mt-2 md:mt-0 space-x-2">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handlePreQuiz(classItem)}
+                      >
                         Pre-Quiz
                       </Button>
-                      <Button variant="default" size="sm">
+                      <Button 
+                        variant="default" 
+                        size="sm"
+                        onClick={() => handleViewClass(classItem)}
+                      >
                         View Class
                       </Button>
                     </div>
@@ -163,7 +208,11 @@ const Dashboard = () => {
                 </div>
               ))}
               
-              <Button variant="outline" className="w-full mt-4">
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                onClick={() => setShowAllClasses(true)}
+              >
                 View Past Classes
               </Button>
             </CardContent>
@@ -176,8 +225,12 @@ const Dashboard = () => {
                 <CardTitle>Recent Classes</CardTitle>
                 <CardDescription>Access your recent class materials and notes</CardDescription>
               </div>
-              <Button variant="link" className="font-medium" asChild>
-                <Link to="#">View All</Link>
+              <Button 
+                variant="link" 
+                className="font-medium" 
+                onClick={() => setShowAllClasses(true)}
+              >
+                View All
               </Button>
             </CardHeader>
             <CardContent>
@@ -189,10 +242,18 @@ const Dashboard = () => {
                       <p className="text-sm text-gray-500 mt-1">May 3, 2025, 09:00 pm</p>
                     </div>
                     <div className="flex mt-3 md:mt-0 space-x-2">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleViewNotes(classItem)}
+                      >
                         View Notes
                       </Button>
-                      <Button variant="default" size="sm">
+                      <Button 
+                        variant="default" 
+                        size="sm"
+                        onClick={() => handlePostQuiz(classItem)}
+                      >
                         Post Quiz
                       </Button>
                     </div>
@@ -200,7 +261,15 @@ const Dashboard = () => {
                   
                   <div className="mt-3 flex flex-wrap gap-1 text-sm">
                     <span className="text-gray-600">Session Resources:</span>
-                    <Button variant="link" size="sm" className="h-auto p-0 text-sm">
+                    <Button 
+                      variant="link" 
+                      size="sm" 
+                      className="h-auto p-0 text-sm"
+                      onClick={() => {
+                        setSelectedClass(classItem);
+                        setShowClassDetails(true);
+                      }}
+                    >
                       View All
                     </Button>
                   </div>
@@ -255,8 +324,12 @@ const Dashboard = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle>Recommended Resources</CardTitle>
-              <Button variant="link" className="font-medium" asChild>
-                <Link to="#">View All</Link>
+              <Button 
+                variant="link" 
+                className="font-medium"
+                onClick={() => setShowAllResources(true)}
+              >
+                View All
               </Button>
             </CardHeader>
             <CardContent>
@@ -271,7 +344,12 @@ const Dashboard = () => {
                           <span className="font-medium">For:</span> Data Structures
                         </p>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6"
+                        onClick={() => window.open(resource.url, '_blank')}
+                      >
                         <ChevronRight className="h-5 w-5" />
                       </Button>
                     </div>
@@ -283,29 +361,55 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Analytics Dialog */}
-      <Dialog open={showAnalytics} onOpenChange={setShowAnalytics}>
-        <DialogContent className="md:max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Detailed Analytics</DialogTitle>
-            <DialogDescription>Your performance metrics and progress</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-6 py-4">
-            <div>
-              <h3 className="font-medium mb-2">Quiz Performance by Subject</h3>
-              <div className="h-[200px] bg-gray-100 flex items-center justify-center">
-                [Chart Visualization]
-              </div>
-            </div>
-            <div>
-              <h3 className="font-medium mb-2">Learning Progress</h3>
-              <div className="h-[200px] bg-gray-100 flex items-center justify-center">
-                [Progress Visualization]
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* All Modals */}
+      {selectedClass && (
+        <>
+          <PreQuizModal 
+            isOpen={showPreQuiz} 
+            onClose={() => setShowPreQuiz(false)} 
+            classId={selectedClass.id}
+            className={selectedClass.title}
+          />
+          
+          <PostQuizModal 
+            isOpen={showPostQuiz} 
+            onClose={() => setShowPostQuiz(false)} 
+            classId={selectedClass.id}
+            className={selectedClass.title}
+          />
+          
+          <ClassDetailsModal 
+            isOpen={showClassDetails} 
+            onClose={() => setShowClassDetails(false)} 
+            classItem={selectedClass} 
+          />
+          
+          <NotesModal 
+            isOpen={showNotes} 
+            onClose={() => setShowNotes(false)} 
+            classItem={selectedClass} 
+          />
+        </>
+      )}
+      
+      <AllClassesModal 
+        isOpen={showAllClasses} 
+        onClose={() => setShowAllClasses(false)} 
+        classes={mockClasses}
+        onViewClass={handleViewClass}
+        onPreQuiz={handlePreQuiz}
+      />
+      
+      <AllResourcesModal 
+        isOpen={showAllResources} 
+        onClose={() => setShowAllResources(false)} 
+        resources={recommendedResources}
+      />
+      
+      <DetailedAnalyticsModal 
+        isOpen={showAnalytics} 
+        onClose={() => setShowAnalytics(false)} 
+      />
     </div>
   );
 };
