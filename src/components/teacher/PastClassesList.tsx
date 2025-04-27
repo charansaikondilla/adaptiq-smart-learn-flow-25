@@ -34,13 +34,6 @@ const PastClassesList: React.FC<PastClassesListProps> = ({ classes }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Past Classes</h2>
-        <Button variant="outline" className="px-4">
-          View All Classes
-        </Button>
-      </div>
-
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <Table>
           <TableHeader>
@@ -89,6 +82,7 @@ const PastClassesList: React.FC<PastClassesListProps> = ({ classes }) => {
           isOpen={!!selectedClass}
           onClose={() => setSelectedClass(null)}
           title={`Analytics: ${selectedClass.title}`}
+          maxWidth="max-w-4xl"
         >
           <ClassAnalytics classData={selectedClass} />
         </ResponsiveDialog>

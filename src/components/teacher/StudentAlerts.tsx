@@ -17,9 +17,10 @@ import StudentDetails from "./StudentDetails";
 
 interface StudentAlertsProps {
   students: Student[];
+  onViewAllClick: () => void;
 }
 
-const StudentAlerts: React.FC<StudentAlertsProps> = ({ students }) => {
+const StudentAlerts: React.FC<StudentAlertsProps> = ({ students, onViewAllClick }) => {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   // Filter students who need attention (using status)
@@ -31,7 +32,7 @@ const StudentAlerts: React.FC<StudentAlertsProps> = ({ students }) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Student Alerts</h2>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" onClick={onViewAllClick}>
           View All Students
         </Button>
       </div>
@@ -86,7 +87,7 @@ const StudentAlerts: React.FC<StudentAlertsProps> = ({ students }) => {
                   className="ml-auto"
                   onClick={() => setSelectedStudent(student)}
                 >
-                  <Eye className="h-4 w-4 mr-1" /> View Results
+                  <Eye className="h-4 w-4 mr-1" /> View Details
                 </Button>
               </CardFooter>
             </Card>
@@ -105,6 +106,7 @@ const StudentAlerts: React.FC<StudentAlertsProps> = ({ students }) => {
           isOpen={!!selectedStudent}
           onClose={() => setSelectedStudent(null)}
           title={`Student Details: ${selectedStudent.name}`}
+          maxWidth="max-w-4xl"
         >
           <StudentDetails student={selectedStudent} />
         </ResponsiveDialog>

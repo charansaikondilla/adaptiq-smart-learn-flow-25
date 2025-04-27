@@ -40,7 +40,7 @@ const ClassCalendarView: React.FC<ClassCalendarViewProps> = ({ classes }) => {
         <h3 className="text-lg font-medium mb-4">
           Classes on {selectedDate ? formatDate(selectedDate.toISOString()) : "Selected Date"}
         </h3>
-        <div className="space-y-3">
+        <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
           {classesForSelectedDate.length > 0 ? (
             classesForSelectedDate.map((classItem) => (
               <Card key={classItem.id} className="overflow-hidden">

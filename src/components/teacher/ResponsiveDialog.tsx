@@ -28,7 +28,7 @@ const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className={`${maxWidth} w-[95vw] max-h-[90vh] overflow-y-auto p-6`}
+        className={`${maxWidth} w-[95vw] max-h-[85vh] overflow-y-auto p-4 sm:p-6`}
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>

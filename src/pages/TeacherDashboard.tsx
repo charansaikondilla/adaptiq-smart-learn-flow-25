@@ -8,6 +8,7 @@ import RecentActivities from "@/components/teacher/RecentActivities";
 import ClassCalendarView from "@/components/teacher/ClassCalendarView";
 import ResponsiveDialog from "@/components/teacher/ResponsiveDialog";
 import CreateClassForm from "@/components/teacher/CreateClassForm";
+import AllStudentsView from "@/components/teacher/AllStudentsView";
 
 // Mock data
 const mockClasses: Class[] = [
@@ -126,12 +127,19 @@ const mockStudents: Student[] = [
 
 const TeacherDashboard: React.FC = () => {
   const [isCreateClassOpen, setIsCreateClassOpen] = useState(false);
-  const [isViewAllClassesOpen, setIsViewAllClassesOpen] = useState(false);
+  const [isViewAllUpcomingClassesOpen, setIsViewAllUpcomingClassesOpen] = useState(false);
+  const [isViewAllPastClassesOpen, setIsViewAllPastClassesOpen] = useState(false);
+  const [isViewAllStudentsOpen, setIsViewAllStudentsOpen] = useState(false);
   const [classes, setClasses] = useState<Class[]>(mockClasses);
 
   const upcomingClasses = classes.filter(
     (classItem) => 
       !classItem.completed && new Date(classItem.scheduledFor) > new Date()
+  );
+
+  const pastClasses = classes.filter(
+    (classItem) => 
+      classItem.completed || new Date(classItem.scheduledFor) < new Date()
   );
 
   const handleCreateClass = (classData: any) => {
@@ -143,7 +151,7 @@ const TeacherDashboard: React.FC = () => {
       createdAt: new Date().toISOString(),
       scheduledFor: classData.scheduledFor,
       meetingUrl: classData.meetingUrl,
-      resources: classData.resources,
+      resources: classData.resources || [],
     };
 
     setClasses([...classes, newClass]);
@@ -161,8 +169,11 @@ const TeacherDashboard: React.FC = () => {
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">Upcoming Classes</h2>
           <div className="space-x-2">
-            <Button variant="outline" onClick={() => setIsViewAllClassesOpen(true)}>
-              View All
+            <Button 
+              variant="outline" 
+              onClick={() => setIsViewAllUpcomingClassesOpen(true)}
+            >
+              View All Upcoming Classes
             </Button>
             <Button onClick={() => setIsCreateClassOpen(true)}>
               Create New Class
@@ -207,12 +218,65 @@ const TeacherDashboard: React.FC = () => {
       </div>
 
       {/* Past Classes Section */}
-      <PastClassesList classes={classes} />
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Past Classes</h2>
+          <Button 
+            variant="outline" 
+            className="px-4"
+            onClick={() => setIsViewAllPastClassesOpen(true)}
+          >
+            View All Past Classes
+          </Button>
+        </div>
+
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Class Title</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Date</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Students</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Avg Score</th>
+                <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {pastClasses.length > 0 ? (
+                pastClasses.slice(0, 5).map((classItem) => (
+                  <tr key={classItem.id}>
+                    <td className="px-4 py-3 text-sm font-medium">{classItem.title}</td>
+                    <td className="px-4 py-3 text-sm text-gray-500">
+                      {new Date(classItem.scheduledFor).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-500">25</td>
+                    <td className="px-4 py-3 text-sm text-gray-500">78%</td>
+                    <td className="px-4 py-3 text-right">
+                      <Button variant="ghost" size="sm">
+                        View Analytics
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                    No past classes found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Student Alerts & Recent Activities */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <StudentAlerts students={mockStudents} />
+          <StudentAlerts 
+            students={mockStudents} 
+            onViewAllClick={() => setIsViewAllStudentsOpen(true)}
+          />
         </div>
         <div>
           <RecentActivities />
@@ -233,19 +297,39 @@ const TeacherDashboard: React.FC = () => {
       </ResponsiveDialog>
 
       <ResponsiveDialog
-        isOpen={isViewAllClassesOpen}
-        onClose={() => setIsViewAllClassesOpen(false)}
-        title="All Classes"
-        maxWidth="max-w-4xl"
+        isOpen={isViewAllUpcomingClassesOpen}
+        onClose={() => setIsViewAllUpcomingClassesOpen(false)}
+        title="All Upcoming Classes"
+        maxWidth="max-w-5xl"
       >
         <div className="space-y-4">
-          <div className="flex justify-end">
+          <div className="flex justify-end mb-4">
             <Button onClick={() => setIsCreateClassOpen(true)}>
               Create New Class
             </Button>
           </div>
-          <ClassCalendarView classes={classes} />
+          <ClassCalendarView classes={upcomingClasses} />
         </div>
+      </ResponsiveDialog>
+
+      <ResponsiveDialog
+        isOpen={isViewAllPastClassesOpen}
+        onClose={() => setIsViewAllPastClassesOpen(false)}
+        title="All Past Classes"
+        maxWidth="max-w-5xl"
+      >
+        <div className="space-y-4">
+          <PastClassesList classes={pastClasses} />
+        </div>
+      </ResponsiveDialog>
+
+      <ResponsiveDialog
+        isOpen={isViewAllStudentsOpen}
+        onClose={() => setIsViewAllStudentsOpen(false)}
+        title="All Students"
+        maxWidth="max-w-5xl"
+      >
+        <AllStudentsView students={mockStudents} classes={classes} />
       </ResponsiveDialog>
     </div>
   );

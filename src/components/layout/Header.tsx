@@ -34,16 +34,6 @@ const Header = () => {
               <Link to="/dashboard" className="text-gray-200 hover:text-adaptive-primary transition-colors">
                 Dashboard
               </Link>
-              {user.role === 'teacher' && (
-                <>
-                  <Link to="/classes" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-                    Classes
-                  </Link>
-                  <Link to="/analytics" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-                    Analytics
-                  </Link>
-                </>
-              )}
               {user.role === 'student' && (
                 <>
                   <Link to="/courses" className="text-gray-200 hover:text-adaptive-primary transition-colors">
