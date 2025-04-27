@@ -9,9 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Class, ClassNote, Quiz, Resource, Student } from '@/types';
 import { ChartContainer, ChartTooltipContent, ChartLegendContent, ChartTooltip, ChartLegend } from '@/components/ui/chart';
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
-import { Calendar as CalendarIcon, Clock, Book, FileText, Video, Users, BarChart2, User, Check, Info, AlertCircle, Calendar, ChevronRight, ArrowRight } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Book, FileText, Video, Users, BarChart2, User, Check, Info, AlertCircle, Calendar, ChevronRight, ArrowRight, ExternalLink } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-// Enhanced mock data for demo
 const mockClasses: Class[] = [
   {
     id: '1',
@@ -364,7 +364,6 @@ const mockResources: Resource[] = [
   }
 ];
 
-// Mock student data with performance details
 const mockStudents: Student[] = [
   { 
     id: 'std1', 
@@ -438,7 +437,6 @@ const mockStudents: Student[] = [
   }
 ];
 
-// Mock concept mastery data
 const conceptMasteryData = [
   { name: 'Programming Basics', mastery: 75 },
   { name: 'Data Structures', mastery: 60 },
@@ -448,7 +446,6 @@ const conceptMasteryData = [
   { name: 'OOP Concepts', mastery: 80 }
 ];
 
-// Mock quiz improvement data
 const quizScoreData = [
   { name: 'CS Fundamentals', pre: 65, post: 85 },
   { name: 'Data Structures', pre: 55, post: 75 },
@@ -456,14 +453,12 @@ const quizScoreData = [
   { name: 'OOP Concepts', pre: 60, post: 80 }
 ];
 
-// Color configuration for charts
 const chartConfig = {
   pre: { color: '#7E69AB' },
   post: { color: '#1EAEDB' },
   mastery: { color: '#9b87f5' },
 };
 
-// Helper function to get status color
 const getStatusColor = (status: string) => {
   switch(status.toLowerCase()) {
     case 'excellent': return 'bg-green-500';
@@ -474,7 +469,6 @@ const getStatusColor = (status: string) => {
   }
 };
 
-// Helper function to format date
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', { 
@@ -486,27 +480,22 @@ const formatDate = (dateString: string) => {
   });
 };
 
-// Helper to filter resources by class
 const getResourcesByClass = (classId: string, aiRecommended = false) => {
   return mockResources.filter(r => r.classId === classId && (!aiRecommended || r.aiRecommended));
 };
 
-// Helper to find class by ID
 const getClassById = (classId: string) => {
   return mockClasses.find(cls => cls.id === classId);
 };
 
-// Helper to find notes by class ID
 const getNotesByClass = (classId: string) => {
   return mockNotes.find(note => note.classId === classId);
 };
 
-// Helper to find quizzes by class ID and type
 const getQuizzesByClassAndType = (classId: string, type: 'pre' | 'post') => {
   return mockQuizzes.find(quiz => quiz.classId === classId && quiz.type === type);
 };
 
-// Helper to organize classes by completion status
 const organizeClasses = () => {
   return {
     upcoming: mockClasses.filter(c => !c.completed).sort((a, b) => 
@@ -518,7 +507,6 @@ const organizeClasses = () => {
   };
 };
 
-// Helper to get student performance for a specific class
 const getStudentPerformanceByClass = (classId: string) => {
   return mockStudents.map(student => {
     const sessionPerformance = student.sessionPerformance.find(s => s.classId === classId);
@@ -541,7 +529,6 @@ const Dashboard = () => {
   const [upcomingClasses, setUpcomingClasses] = useState([]);
 
   useEffect(() => {
-    // Filter only upcoming classes
     const organized = organizeClasses();
     setUpcomingClasses(organized.upcoming.slice(0, 3));
   }, []);
@@ -549,7 +536,6 @@ const Dashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid gap-6">
-        {/* Upcoming Classes Section */}
         <Card>
           <CardHeader>
             <CardTitle>Upcoming Classes</CardTitle>
@@ -581,7 +567,6 @@ const Dashboard = () => {
                         </Button>
                       )}
                     </div>
-                    {/* Resources Section */}
                     {classItem.resources && classItem.resources.length > 0 && (
                       <div className="mt-4">
                         <h4 className="text-sm font-medium mb-2">Resources:</h4>
@@ -606,18 +591,15 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Analytics Dialog */}
         <Dialog open={showAnalytics} onOpenChange={setShowAnalytics}>
           <DialogContent className="max-w-4xl w-[90vw] max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Detailed Analytics</DialogTitle>
               <DialogDescription>Your performance metrics and progress</DialogDescription>
             </DialogHeader>
-            {/* Analytics content here */}
           </DialogContent>
         </Dialog>
 
-        {/* Notes Section */}
         {selectedClass && (
           <Dialog open={!!selectedClass} onOpenChange={() => setSelectedClass(null)}>
             <DialogContent className="max-w-4xl w-[90vw] max-h-[80vh] overflow-y-auto">
