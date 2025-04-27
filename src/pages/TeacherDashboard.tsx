@@ -134,6 +134,8 @@ const TeacherDashboard: React.FC = () => {
   const [isManageResourcesOpen, setIsManageResourcesOpen] = useState(false);
   const [classes, setClasses] = useState<Class[]>(mockClasses);
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
+  const [viewClassDetailsOpen, setViewClassDetailsOpen] = useState(false);
+  const [classToView, setClassToView] = useState<Class | null>(null);
 
   const upcomingClasses = classes.filter(
     (classItem) => 
@@ -159,6 +161,15 @@ const TeacherDashboard: React.FC = () => {
 
     setClasses([...classes, newClass]);
     setIsCreateClassOpen(false);
+  };
+
+  const handleViewClassDetails = (classItem: Class) => {
+    setClassToView(classItem);
+    setViewClassDetailsOpen(true);
+  };
+
+  const handleViewAnalytics = (classItem: Class) => {
+    setSelectedClass(classItem);
   };
 
   return (
@@ -219,7 +230,11 @@ const TeacherDashboard: React.FC = () => {
                 )}
                 
                 <div className="flex justify-between items-center pt-2 border-t">
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => handleViewClassDetails(classItem)}
+                  >
                     View Details
                   </Button>
                   {classItem.meetingUrl && (
@@ -281,12 +296,7 @@ const TeacherDashboard: React.FC = () => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={() => {
-                          const classToView = classes.find(c => c.id === classItem.id);
-                          if (classToView) {
-                            setSelectedClass(classToView);
-                          }
-                        }}
+                        onClick={() => handleViewAnalytics(classItem)}
                       >
                         View Analytics
                       </Button>
@@ -365,6 +375,88 @@ const TeacherDashboard: React.FC = () => {
         maxWidth="max-w-5xl"
       >
         <AllStudentsView students={mockStudents} classes={classes} />
+      </ResponsiveDialog>
+
+      <ResponsiveDialog
+        isOpen={!!selectedClass}
+        onClose={() => setSelectedClass(null)}
+        title={selectedClass ? `Analytics: ${selectedClass.title}` : "Class Analytics"}
+        maxWidth="max-w-4xl"
+      >
+        {selectedClass && <ClassAnalytics classData={selectedClass} />}
+      </ResponsiveDialog>
+
+      {/* Class Details Dialog */}
+      <ResponsiveDialog
+        isOpen={viewClassDetailsOpen}
+        onClose={() => setViewClassDetailsOpen(false)}
+        title={classToView ? `Details: ${classToView.title}` : "Class Details"}
+        maxWidth="max-w-3xl"
+      >
+        {classToView && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">{classToView.title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium">Scheduled For:</p>
+                <p className="text-gray-700">
+                  {new Date(classToView.scheduledFor).toLocaleDateString()} at{" "}
+                  {new Date(classToView.scheduledFor).toLocaleTimeString()}
+                </p>
+              </div>
+              {classToView.meetingUrl && (
+                <div>
+                  <p className="text-sm font-medium">Meeting Link:</p>
+                  <Button variant="outline" size="sm" className="mt-1" asChild>
+                    <a href={classToView.meetingUrl} target="_blank" rel="noopener noreferrer">
+                      Join Meeting
+                    </a>
+                  </Button>
+                </div>
+              )}
+            </div>
+            
+            <div>
+              <p className="text-sm font-medium mb-2">Description:</p>
+              <p className="text-gray-700">{classToView.description}</p>
+            </div>
+            
+            {/* Resources Section */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Resources:</h4>
+              {classToView.resources && classToView.resources.length > 0 ? (
+                <ul className="space-y-3">
+                  {classToView.resources.map(resource => (
+                    <li key={resource.id} className="border rounded-md p-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h5 className="font-medium">{resource.title}</h5>
+                          {resource.description && (
+                            <p className="text-sm text-gray-600">{resource.description}</p>
+                          )}
+                        </div>
+                        <span className="text-xs px-2 py-1 bg-gray-100 rounded">
+                          {resource.type}
+                        </span>
+                      </div>
+                      {resource.url && (
+                        <div className="mt-2">
+                          <Button variant="outline" size="sm" asChild>
+                            <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                              Access Resource
+                            </a>
+                          </Button>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-muted-foreground">No resources have been added for this class.</p>
+              )}
+            </div>
+          </div>
+        )}
       </ResponsiveDialog>
 
       {/* Manage Resources Dialog */}

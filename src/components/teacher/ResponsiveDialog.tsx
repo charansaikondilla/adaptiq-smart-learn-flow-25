@@ -28,14 +28,14 @@ const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className={`${maxWidth} w-[90vw] max-h-[80vh] overflow-y-auto p-4 sm:p-6`}
+        className={`${maxWidth} w-[90vw] max-h-[85vh] overflow-y-auto p-4 sm:p-6`}
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <div className="mt-4">{children}</div>
+        <div className="mt-4 max-h-[65vh] overflow-y-auto pr-1">{children}</div>
       </DialogContent>
     </Dialog>
   );
