@@ -30,24 +30,9 @@ const Header = () => {
 
         <nav className="hidden md:flex items-center space-x-4">
           {user && (
-            <>
-              <Link to="/dashboard" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-                Dashboard
-              </Link>
-              {user.role === 'student' && (
-                <>
-                  <Link to="/courses" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-                    My Courses
-                  </Link>
-                  <Link to="/notes" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-                    Notes
-                  </Link>
-                  <Link to="/progress" className="text-gray-200 hover:text-adaptive-primary transition-colors">
-                    Progress
-                  </Link>
-                </>
-              )}
-            </>
+            <Link to="/dashboard" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+              Dashboard
+            </Link>
           )}
         </nav>
 
@@ -69,15 +54,9 @@ const Header = () => {
                     <p className="text-xs leading-none text-muted-foreground">
                       {user.email}
                     </p>
-                    <p className="text-xs leading-none text-muted-foreground capitalize">
-                      {user.role}
-                    </p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/profile">Profile</Link>
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>
                   Log out
                 </DropdownMenuItem>
