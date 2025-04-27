@@ -79,3 +79,37 @@ export interface Concept {
   name: string;
   description: string;
 }
+
+export interface StudentProgress {
+  userId: string;
+  conceptId: string;
+  mastery: number; // 0-100
+  lastAssessment: string;
+  strengthAreas: string[];
+  improvementAreas: string[];
+}
+
+export interface ClassAnalytics {
+  classId: string;
+  averageScore: number;
+  participationRate: number;
+  conceptMasteryMap: Record<string, number>;
+  studentPerformance: {
+    userId: string;
+    score: number;
+    participation: number;
+  }[];
+}
+
+export interface LiveClass {
+  id: string;
+  classId: string;
+  scheduledFor: string;
+  meetingUrl: string;
+  title: string;
+  description: string;
+  isCancelled: boolean;
+  isCompleted: boolean;
+  duration: number; // in minutes
+}
+

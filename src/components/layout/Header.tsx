@@ -17,36 +17,46 @@ const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="border-b bg-white">
+    <header className="border-b bg-adaptive-dark text-white">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gradient-to-r from-adaptiq-400 to-adaptiq-600">
+          <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gradient-to-r from-adaptive-primary to-adaptive-secondary">
             <div className="absolute inset-0 flex items-center justify-center text-white font-bold">A</div>
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-adaptiq-500 to-adaptiq-700 bg-clip-text text-transparent">
-            Adaptiq
+          <span className="text-xl font-bold text-white">
+            <span className="text-adaptive-primary">Adaptive</span>IQ
           </span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-4">
           {user && (
             <>
-              <Link to="/dashboard" className="text-gray-600 hover:text-adaptiq-600 transition-colors">
+              <Link to="/dashboard" className="text-gray-200 hover:text-adaptive-primary transition-colors">
                 Dashboard
               </Link>
               {user.role === 'teacher' && (
-                <Link to="/classes" className="text-gray-600 hover:text-adaptiq-600 transition-colors">
-                  My Classes
-                </Link>
+                <>
+                  <Link to="/classes" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Classes
+                  </Link>
+                  <Link to="/analytics" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Analytics
+                  </Link>
+                </>
               )}
               {user.role === 'student' && (
-                <Link to="/classes" className="text-gray-600 hover:text-adaptiq-600 transition-colors">
-                  My Courses
-                </Link>
+                <>
+                  <Link to="/courses" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    My Courses
+                  </Link>
+                  <Link to="/notes" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Notes
+                  </Link>
+                  <Link to="/progress" className="text-gray-200 hover:text-adaptive-primary transition-colors">
+                    Progress
+                  </Link>
+                </>
               )}
-              <Link to="/analytics" className="text-gray-600 hover:text-adaptiq-600 transition-colors">
-                Analytics
-              </Link>
             </>
           )}
         </nav>
@@ -55,10 +65,10 @@ const Header = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-adaptive-primary/20">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user.avatarUrl} alt={user.name} />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="bg-adaptive-primary text-white">{user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -85,10 +95,10 @@ const Header = () => {
             </DropdownMenu>
           ) : (
             <div className="flex gap-2">
-              <Button variant="outline" asChild>
+              <Button variant="ghost" className="text-white hover:text-adaptive-primary" asChild>
                 <Link to="/login">Login</Link>
               </Button>
-              <Button asChild>
+              <Button className="bg-adaptive-primary hover:bg-adaptive-secondary text-white" asChild>
                 <Link to="/signup">Sign Up</Link>
               </Button>
             </div>

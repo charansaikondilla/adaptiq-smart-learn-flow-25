@@ -32,9 +32,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12 bg-gradient-to-b from-adaptive-dark to-adaptive-secondary/90">
+      <Card className="w-full max-w-md bg-white shadow-xl border-0">
         <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center mb-2">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-adaptive-primary to-adaptive-secondary flex items-center justify-center text-white text-2xl font-bold">
+              A
+            </div>
+          </div>
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
           <CardDescription>
             Enter your credentials to access your account
@@ -50,13 +55,14 @@ const Login = () => {
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="border-gray-300 focus:border-adaptive-primary focus:ring-adaptive-primary"
                 required
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-adaptiq-600 hover:underline">
+                <Link to="/forgot-password" className="text-sm text-adaptive-primary hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -66,6 +72,7 @@ const Login = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="border-gray-300 focus:border-adaptive-primary focus:ring-adaptive-primary"
                 required
               />
             </div>
@@ -76,7 +83,7 @@ const Login = () => {
             
             <Button
               type="submit"
-              className="w-full bg-adaptiq-500 hover:bg-adaptiq-600"
+              className="w-full bg-adaptive-primary hover:bg-adaptive-secondary text-white"
               disabled={isLoading}
             >
               {isLoading ? 'Logging in...' : 'Log in'}
@@ -84,7 +91,7 @@ const Login = () => {
             
             <div className="text-center text-sm">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-adaptiq-600 hover:underline">
+              <Link to="/signup" className="text-adaptive-primary hover:underline">
                 Sign up
               </Link>
             </div>
@@ -103,7 +110,7 @@ const Login = () => {
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full border-adaptive-primary text-adaptive-primary hover:bg-adaptive-primary/10"
                 onClick={() => {
                   setEmail('teacher@example.com');
                   setPassword('password');
@@ -113,7 +120,7 @@ const Login = () => {
               </Button>
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full border-adaptive-primary text-adaptive-primary hover:bg-adaptive-primary/10"
                 onClick={() => {
                   setEmail('student@example.com');
                   setPassword('password');

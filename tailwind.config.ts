@@ -75,6 +75,13 @@ export default {
 					800: '#104884',
 					900: '#133d6e',
 					950: '#0d2548',
+				},
+				adaptive: {
+					primary: '#9b87f5',
+					secondary: '#7E69AB',
+					dark: '#1A1F2C',
+					light: '#D6BCFA',
+					accent: '#F0EAFF',
 				}
 			},
 			borderRadius: {

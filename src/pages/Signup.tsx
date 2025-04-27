@@ -43,9 +43,14 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12 bg-gradient-to-b from-adaptive-dark to-adaptive-secondary/90">
+      <Card className="w-full max-w-md bg-white shadow-xl border-0">
         <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center mb-2">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-adaptive-primary to-adaptive-secondary flex items-center justify-center text-white text-2xl font-bold">
+              A
+            </div>
+          </div>
           <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
           <CardDescription>
             Enter your information to create an account
@@ -61,6 +66,7 @@ const Signup = () => {
                 placeholder="John Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="border-gray-300 focus:border-adaptive-primary focus:ring-adaptive-primary"
                 required
               />
             </div>
@@ -73,6 +79,7 @@ const Signup = () => {
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="border-gray-300 focus:border-adaptive-primary focus:ring-adaptive-primary"
                 required
               />
             </div>
@@ -85,6 +92,7 @@ const Signup = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="border-gray-300 focus:border-adaptive-primary focus:ring-adaptive-primary"
                 required
               />
             </div>
@@ -97,6 +105,7 @@ const Signup = () => {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                className="border-gray-300 focus:border-adaptive-primary focus:ring-adaptive-primary"
                 required
               />
             </div>
@@ -109,11 +118,11 @@ const Signup = () => {
                 className="flex space-x-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="student" id="student" />
+                  <RadioGroupItem value="student" id="student" className="border-adaptive-primary text-adaptive-primary" />
                   <Label htmlFor="student">Student</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="teacher" id="teacher" />
+                  <RadioGroupItem value="teacher" id="teacher" className="border-adaptive-primary text-adaptive-primary" />
                   <Label htmlFor="teacher">Teacher</Label>
                 </div>
               </RadioGroup>
@@ -125,7 +134,7 @@ const Signup = () => {
             
             <Button
               type="submit"
-              className="w-full bg-adaptiq-500 hover:bg-adaptiq-600"
+              className="w-full bg-adaptive-primary hover:bg-adaptive-secondary text-white"
               disabled={isLoading}
             >
               {isLoading ? 'Creating account...' : 'Sign up'}
@@ -133,7 +142,7 @@ const Signup = () => {
             
             <div className="text-center text-sm">
               Already have an account?{' '}
-              <Link to="/login" className="text-adaptiq-600 hover:underline">
+              <Link to="/login" className="text-adaptive-primary hover:underline">
                 Log in
               </Link>
             </div>
